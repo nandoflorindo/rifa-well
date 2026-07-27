@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rifa Solidária — Well</title>
+<style>
+  :root {
+    --bg: #f1e9d6;
+    --bg-panel: #fbf6ea;
+    --bg-panel-2: #f4ecd9;
+    --ink: #2c2418;
+    --ink-dim: #6b5f47;
+    --gold: #9c7a2e;
+    --gold-strong: #7c5f22;
+    --crimson: #7c2530;
+    --crimson-strong: #611c25;
+    --line: rgba(44, 36, 24, 0.16);
+    --shadow: rgba(120, 100, 60, 0.2);
+    --focus: #3d6b52;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0f1e18;
+      --bg-panel: #16281f;
+      --bg-panel-2: #122019;
+      --ink: #ece5d4;
+      --ink-dim: #a9a28d;
+      --gold: #c9a24b;
+      --gold-strong: #e2bd6a;
+      --crimson: #c15c68;
+      --crimson-strong: #e2828c;
+      --line: rgba(236, 229, 212, 0.14);
+      --shadow: rgba(0, 0, 0, 0.45);
+      --focus: #8fd9b4;
+    }
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background:
+      radial-gradient(ellipse at 20% -10%, color-mix(in srgb, var(--gold) 10%, transparent), transparent 55%),
+      var(--bg);
+    color: var(--ink);
+    font-family: Georgia, "Iowan Old Style", "Palatino Linotype", serif;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .sheet {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 2.25rem 1.25rem 3rem;
+  }
+
+  .eyebrow {
+    font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--crimson-strong);
+    text-align: center;
+    margin: 0 0 0.6rem;
+  }
+
+  h1 {
+    font-size: clamp(1.7rem, 6vw, 2.3rem);
+    text-align: center;
+    margin: 0 0 0.9rem;
+    text-wrap: balance;
+    color: var(--ink);
+  }
+
+  .lede {
+    font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+    font-size: 0.98rem;
+    color: var(--ink-dim);
+    max-width: 46ch;
+    margin: 0 auto 1.75rem;
+    text-align: center;
+  }
+
+  .facts {
+    display: flex;
+    gap: 0;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 2rem;
+    background: var(--bg-panel);
+  }
+  .facts > div {
+    flex: 1;
+    text-align: center;
+    padding: 0.9rem 0.5rem;
+  }
+  .facts > div + div { border-left: 1px solid var(--line); }
+  .facts .num {
+    font-family: "SFMono-Regular", Consolas, "Cambria Math", serif;
+    font-variant-numeric: tabular-nums;
+    font-size: 1.6rem;
+    color: var(--gold-strong);
+    display: block;
+    line-height: 1.1;
+  }
+  .facts .label {
+    font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-dim);
+  }
+
+  section { margin-bottom: 2.1rem; }
+
+  h2 {
+    font-size: 0.78rem;
+    font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold-strong);
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 0.5rem;
+    margin: 0 0 1rem;
+  }
+
+  .stat-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.4rem;
+    font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+    font-size: 0.92rem;
+    justify-content: center;
+    color: var(--ink-dim);
+  }
+  .stat-row b {
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .bonus-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 0.6rem;
+  }
+  .bonus-tile {
+    background: var(--bg-panel);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 0.55rem 0.7rem;
+    font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+  }
+  .bonus-tile .v {
+    display: block;
+    font-family: "SFMono-Regular", Consolas, monospace;
+    font-variant-numeric: tabular-nums;
+    font-size: 1.02rem;
+    color: var(--ink);
+  }
+  .bonus-tile .k {
+    font-size: 0.68rem;
+    color: var(--ink-dim);
+    letter-spacing: 0.02em;
+  }
+
+  .gear-grid {
+    display: grid;
+    gap: 0.7rem;
+  }
+  .gear-card {
+    background: var(--bg-panel);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 0.8rem 0.9rem;
+  }
+  .gear-card .name {
+    font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+    font-weight: 700;
+    font-size: 0.92rem;
+    color: var(--gold-strong);
+    margin-bottom: 0.4rem;
+  }
+  .slots {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+    font-size: 0.78rem;
+  }
+  .slot {
+    background: var(--bg-panel-2);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 0.2rem 0.65rem;
+    color: var(--ink-dim);
+  }
+
+  .ledger {
+    background: var(--bg-panel);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 0.3rem 0.9rem;
+  }
+  .ledger-row {
+    display: flex;
+    align-items: baseline;
+    gap: 0.4rem;
+    padding: 0.5rem 0;
+    font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+    font-size: 0.88rem;
+  }
+  .ledger-row + .ledger-row { border-top: 1px dotted var(--line); }
+  .ledger-row .k { color: var(--ink-dim); white-space: nowrap; }
+  .ledger-row .fill {
+    flex: 1;
+    border-bottom: 1px dotted var(--line);
+    transform: translateY(-0.3em);
+  }
+  .ledger-row .v {
+    font-family: "SFMono-Regular", Consolas, monospace;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink);
+    white-space: nowrap;
+  }
+
+  .steps {
+    counter-reset: step;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+    font-size: 0.92rem;
+  }
+  .steps li {
+    counter-increment: step;
+    display: flex;
+    gap: 0.7rem;
+    align-items: flex-start;
+  }
+  .steps li::before {
+    content: counter(step);
+    flex: none;
+    width: 1.6rem;
+    height: 1.6rem;
+    border-radius: 50%;
+    background: var(--crimson);
+    color: var(--bg-panel);
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.82rem;
+  }
+
+  .callout {
+    background: linear-gradient(160deg, var(--bg-panel-2), var(--bg-panel));
+    border: 1px solid var(--gold);
+    border-radius: 12px;
+    padding: 1.1rem 1.2rem;
+    text-align: center;
+    margin-top: 1.1rem;
+    box-shadow: 0 6px 18px -8px var(--shadow);
+  }
+  .callout .to-label {
+    font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-dim);
+  }
+  .callout .name-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    margin: 0.35rem 0 0.15rem;
+  }
+  .callout .name {
+    font-size: 1.5rem;
+    color: var(--gold-strong);
+    letter-spacing: 0.02em;
+  }
+  .copy-btn {
+    font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+    font-size: 0.72rem;
+    border: 1px solid var(--line);
+    background: transparent;
+    color: var(--ink-dim);
+    border-radius: 999px;
+    padding: 0.3rem 0.7rem;
+    cursor: pointer;
+  }
+  .copy-btn:hover { border-color: var(--gold); color: var(--gold-strong); }
+  .copy-btn:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+  .callout .price {
+    font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+    font-size: 0.85rem;
+    color: var(--ink-dim);
+  }
+
+  .number-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.5rem;
+  }
+  .num-cell {
+    aspect-ratio: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    font-family: "SFMono-Regular", Consolas, monospace;
+    font-variant-numeric: tabular-nums;
+  }
+  .num-cell .n { font-size: 1.15rem; font-weight: 700; }
+  .num-cell .buyer {
+    font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+    font-size: 0.58rem;
+    margin-top: 0.15rem;
+    max-width: 90%;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .num-cell.livre {
+    background: color-mix(in srgb, var(--focus) 14%, var(--bg-panel));
+    color: var(--ink);
+  }
+  .num-cell.vendido {
+    background: color-mix(in srgb, var(--crimson) 20%, var(--bg-panel));
+    color: var(--ink-dim);
+  }
+  .legend {
+    display: flex;
+    justify-content: center;
+    gap: 1.4rem;
+    margin-top: 0.9rem;
+    font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+    font-size: 0.78rem;
+    color: var(--ink-dim);
+  }
+  .legend span { display: flex; align-items: center; gap: 0.4rem; }
+  .dot {
+    display: inline-block;
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 50%;
+  }
+  .dot.livre { background: color-mix(in srgb, var(--focus) 60%, var(--bg-panel)); }
+  .dot.vendido { background: color-mix(in srgb, var(--crimson) 70%, var(--bg-panel)); }
+
+  .note {
+    font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+    font-size: 0.85rem;
+    color: var(--ink-dim);
+    text-align: center;
+    line-height: 1.6;
+  }
+
+  footer {
+    margin-top: 2.4rem;
+    text-align: center;
+    font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+    font-size: 0.82rem;
+    color: var(--ink-dim);
+    border-top: 1px solid var(--line);
+    padding-top: 1.2rem;
+  }
+  footer .heart { color: var(--crimson-strong); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .callout { transition: box-shadow 0.3s ease; }
+  }
+</style>
+</head>
+<body>
+<div class="sheet">
+  <p class="eyebrow">Rifa Solidária</p>
+  <h1>Ajudando o Well a cuidar da filha</h1>
+  <p class="lede">
+    O Well está vendendo o personagem dele para custear a cirurgia da filha.
+    Em vez de vender direto, viramos isso numa rifa: por um valor baixo você
+    concorre a um char carregado — e ajuda de verdade quem está precisando.
+  </p>
+
+  <div class="facts">
+    <div><span class="num">30</span><span class="label">Números</span></div>
+    <div><span class="num">1.000</span><span class="label">TC cada</span></div>
+  </div>
+
+  <section>
+    <h2>Números</h2>
+    <div class="number-grid">
+      <div class="num-cell livre"><span class="n">1</span></div>
+      <div class="num-cell livre"><span class="n">2</span></div>
+      <div class="num-cell livre"><span class="n">3</span></div>
+      <div class="num-cell livre"><span class="n">4</span></div>
+      <div class="num-cell livre"><span class="n">5</span></div>
+      <div class="num-cell livre"><span class="n">6</span></div>
+      <div class="num-cell livre"><span class="n">7</span></div>
+      <div class="num-cell livre"><span class="n">8</span></div>
+      <div class="num-cell livre"><span class="n">9</span></div>
+      <div class="num-cell livre"><span class="n">10</span></div>
+      <div class="num-cell livre"><span class="n">11</span></div>
+      <div class="num-cell livre"><span class="n">12</span></div>
+      <div class="num-cell livre"><span class="n">13</span></div>
+      <div class="num-cell livre"><span class="n">14</span></div>
+      <div class="num-cell livre"><span class="n">15</span></div>
+      <div class="num-cell livre"><span class="n">16</span></div>
+      <div class="num-cell livre"><span class="n">17</span></div>
+      <div class="num-cell livre"><span class="n">18</span></div>
+      <div class="num-cell livre"><span class="n">19</span></div>
+      <div class="num-cell livre"><span class="n">20</span></div>
+      <div class="num-cell livre"><span class="n">21</span></div>
+      <div class="num-cell livre"><span class="n">22</span></div>
+      <div class="num-cell livre"><span class="n">23</span></div>
+      <div class="num-cell livre"><span class="n">24</span></div>
+      <div class="num-cell livre"><span class="n">25</span></div>
+      <div class="num-cell livre"><span class="n">26</span></div>
+      <div class="num-cell livre"><span class="n">27</span></div>
+      <div class="num-cell livre"><span class="n">28</span></div>
+      <div class="num-cell livre"><span class="n">29</span></div>
+      <div class="num-cell livre"><span class="n">30</span></div>
+    </div>
+    <div class="legend">
+      <span><i class="dot livre"></i> Livre</span>
+      <span><i class="dot vendido"></i> Vendido</span>
+    </div>
+  </section>
+
+  <section>
+    <h2>Como Participar</h2>
+    <ol class="steps">
+      <li>Escolha um número de 1 a 30 que ainda esteja livre.</li>
+      <li>Envie 1.000 TC para o personagem indicado abaixo.</li>
+      <li>Me manda o print da transferência pra eu confirmar seu número.</li>
+    </ol>
+
+    <div class="callout">
+      <div class="to-label">Enviar TC para</div>
+      <div class="name-row">
+        <span class="name" id="charName">Rifa Well</span>
+        <button class="copy-btn" id="copyBtn" type="button">Copiar</button>
+      </div>
+      <div class="price">1.000 TC por número</div>
+    </div>
+  </section>
+
+  <section>
+    <h2>O Personagem</h2>
+    <div class="stat-row">
+      <span>RP <b>1047</b></span>
+      <span>Distance <b>128</b></span>
+      <span>Magic Level <b>38</b></span>
+    </div>
+  </section>
+
+  <section>
+    <h2>!bonus</h2>
+    <div class="bonus-grid">
+      <div class="bonus-tile"><span class="v">+22.30%</span><span class="k">Critical Damage</span></div>
+      <div class="bonus-tile"><span class="v">+3.90%</span><span class="k">Critical Chance</span></div>
+      <div class="bonus-tile"><span class="v">+44</span><span class="k">Skills</span></div>
+      <div class="bonus-tile"><span class="v">+6.55%</span><span class="k">Onslaught</span></div>
+      <div class="bonus-tile"><span class="v">+9.45%</span><span class="k">Transcendance</span></div>
+      <div class="bonus-tile"><span class="v">+3.04%</span><span class="k">Ruse</span></div>
+      <div class="bonus-tile"><span class="v">+3.25%</span><span class="k">Ruse Penetration</span></div>
+      <div class="bonus-tile"><span class="v">+3.75%</span><span class="k">Momentum</span></div>
+      <div class="bonus-tile"><span class="v">+5.45%</span><span class="k">Tier Amplification</span></div>
+      <div class="bonus-tile"><span class="v">35</span><span class="k">Total Outfits</span></div>
+      <div class="bonus-tile"><span class="v">15</span><span class="k">Total Mounts</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Equipamentos</h2>
+    <div class="gear-grid">
+      <div class="gear-card">
+        <div class="name">Sanguine Bow</div>
+        <div class="slots">
+          <span class="slot">Holy Atk. II</span>
+          <span class="slot">Crit. Chance III</span>
+          <span class="slot">Onslaught IV (Fatal)</span>
+        </div>
+      </div>
+      <div class="gear-card">
+        <div class="name">Falcon Greaves</div>
+        <div class="slots">
+          <span class="slot">Magic Level IV</span>
+          <span class="slot">Mana Leech I</span>
+          <span class="slot">Transc. V</span>
+        </div>
+      </div>
+      <div class="gear-card">
+        <div class="name">Feverbloom Boots</div>
+        <div class="slots">
+          <span class="slot">Tier Amp. II</span>
+          <span class="slot">Magic Level II</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Relicário</h2>
+    <div class="ledger">
+      <div class="ledger-row"><span class="k">Critical Damage</span><span class="fill"></span><span class="v">Nv 27</span></div>
+      <div class="ledger-row"><span class="k">Elemental Bond</span><span class="fill"></span><span class="v">Nv 69</span></div>
+      <div class="ledger-row"><span class="k">Loot</span><span class="fill"></span><span class="v">Nv 20</span></div>
+      <div class="ledger-row"><span class="k">Onslaught (Fatal)</span><span class="fill"></span><span class="v">Nv 27</span></div>
+      <div class="ledger-row"><span class="k">Ruse (Dodge)</span><span class="fill"></span><span class="v">Nv 27</span></div>
+      <div class="ledger-row"><span class="k">Skill Points</span><span class="fill"></span><span class="v">Nv 27</span></div>
+      <div class="ledger-row"><span class="k">Transcedence</span><span class="fill"></span><span class="v">Nv 27</span></div>
+      <div class="ledger-row"><span class="k">Tier Amplification</span><span class="fill"></span><span class="v">Nv 24</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Sorteio</h2>
+    <p class="note">
+      Assim que os 30 números forem vendidos, o sorteio é feito no
+      Random.org e o resultado é divulgado aqui com print — sem enrolação.
+    </p>
+  </section>
+
+  <footer>
+    100% do valor arrecadado vai direto para a cirurgia da filha do Well.
+    É pouco pra você, mas faz toda diferença pra ele. <span class="heart">&#9829;</span>
+    <br><br>
+    Números sujeitos a disponibilidade · confirmação manual pelo organizador.
+  </footer>
+</div>
+
+<script>
+  var btn = document.getElementById('copyBtn');
+  var nameEl = document.getElementById('charName');
+
+  function showLabel(label) {
+    btn.textContent = label;
+    setTimeout(function () { btn.textContent = 'Copiar'; }, 1800);
+  }
+
+  function selectNode(node) {
+    var range = document.createRange();
+    range.selectNodeContents(node);
+    var sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+  }
+
+  function fallbackCopy(text) {
+    var ok = false;
+    try {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.focus();
+      ta.select();
+      ok = document.execCommand('copy');
+      document.body.removeChild(ta);
+    } catch (e) { ok = false; }
+
+    if (ok) {
+      showLabel('Copiado!');
+    } else {
+      selectNode(nameEl);
+      showLabel('Selecionado — Ctrl+C');
+    }
+  }
+
+  btn.addEventListener('click', function () {
+    var text = nameEl.textContent;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text)
+        .then(function () { showLabel('Copiado!'); })
+        .catch(function () { fallbackCopy(text); });
+    } else {
+      fallbackCopy(text);
+    }
+  });
+</script>
+</body>
+</html>
