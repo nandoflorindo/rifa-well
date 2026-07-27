@@ -1,56 +1,70 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Rifa Solidária — Well</title>
 <style>
   :root {
-    --bg: #f1e9d6;
-    --bg-panel: #fbf6ea;
-    --bg-panel-2: #f4ecd9;
-    --ink: #2c2418;
-    --ink-dim: #6b5f47;
-    --gold: #9c7a2e;
-    --gold-strong: #7c5f22;
-    --crimson: #7c2530;
-    --crimson-strong: #611c25;
-    --line: rgba(44, 36, 24, 0.16);
-    --shadow: rgba(120, 100, 60, 0.2);
-    --focus: #3d6b52;
-  }
-
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #0f1e18;
-      --bg-panel: #16281f;
-      --bg-panel-2: #122019;
-      --ink: #ece5d4;
-      --ink-dim: #a9a28d;
-      --gold: #c9a24b;
-      --gold-strong: #e2bd6a;
-      --crimson: #c15c68;
-      --crimson-strong: #e2828c;
-      --line: rgba(236, 229, 212, 0.14);
-      --shadow: rgba(0, 0, 0, 0.45);
-      --focus: #8fd9b4;
-    }
+    --bg: #0c0720;
+    --bg-panel: #1a1140;
+    --bg-panel-2: #140c30;
+    --ink: #f5f1ff;
+    --ink-dim: #b6a9dd;
+    --gold: #ffd166;
+    --gold-strong: #ffbe3d;
+    --crimson: #ff4d9d;
+    --crimson-strong: #ff2d85;
+    --cyan: #4de1ff;
+    --line: rgba(245, 241, 255, 0.16);
+    --shadow: rgba(0, 0, 0, 0.55);
+    --focus: #4de1ff;
   }
 
   * { box-sizing: border-box; }
 
   body {
     margin: 0;
-    background:
-      radial-gradient(ellipse at 20% -10%, color-mix(in srgb, var(--gold) 10%, transparent), transparent 55%),
-      var(--bg);
+    background: var(--bg);
     color: var(--ink);
-    font-family: Georgia, "Iowan Old Style", "Palatino Linotype", serif;
+    font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
   }
 
+  .bg-blobs {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+  }
+  .blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(75px);
+    opacity: 0.5;
+  }
+  .blob-a {
+    width: 420px; height: 420px;
+    background: var(--crimson);
+    top: -120px; left: -100px;
+    animation: floatA 14s ease-in-out infinite alternate;
+  }
+  .blob-b {
+    width: 380px; height: 380px;
+    background: var(--gold);
+    top: 6%; right: -140px;
+    animation: floatB 18s ease-in-out infinite alternate;
+  }
+  .blob-c {
+    width: 460px; height: 460px;
+    background: var(--cyan);
+    bottom: -160px; left: 15%;
+    animation: floatC 20s ease-in-out infinite alternate;
+  }
+  @keyframes floatA { from { transform: translate(0,0) scale(1); } to { transform: translate(50px,70px) scale(1.15); } }
+  @keyframes floatB { from { transform: translate(0,0) scale(1); } to { transform: translate(-60px,50px) scale(1.1); } }
+  @keyframes floatC { from { transform: translate(0,0) scale(1); } to { transform: translate(40px,-60px) scale(1.2); } }
+
   .sheet {
+    position: relative;
     max-width: 600px;
     margin: 0 auto;
     padding: 2.25rem 1.25rem 3rem;
@@ -58,21 +72,33 @@
 
   .eyebrow {
     font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 0.16em;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.22em;
     text-transform: uppercase;
     color: var(--crimson-strong);
     text-align: center;
     margin: 0 0 0.6rem;
+    text-shadow: 0 0 18px color-mix(in srgb, var(--crimson) 60%, transparent);
   }
 
   h1 {
-    font-size: clamp(1.7rem, 6vw, 2.3rem);
+    font-size: clamp(2rem, 8vw, 2.9rem);
+    font-weight: 900;
+    letter-spacing: -0.01em;
     text-align: center;
     margin: 0 0 0.9rem;
     text-wrap: balance;
-    color: var(--ink);
+    background: linear-gradient(90deg, var(--gold), var(--crimson) 45%, var(--cyan) 80%, var(--gold));
+    background-size: 250% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: shimmer 7s ease-in-out infinite;
+  }
+  @keyframes shimmer {
+    0%, 100% { background-position: 0% center; }
+    50% { background-position: 100% center; }
   }
 
   .lede {
@@ -259,15 +285,36 @@
     font-size: 0.82rem;
   }
 
+  @property --angle {
+    syntax: '<angle>';
+    inherits: false;
+    initial-value: 0deg;
+  }
+
   .callout {
+    position: relative;
+    isolation: isolate;
     background: linear-gradient(160deg, var(--bg-panel-2), var(--bg-panel));
-    border: 1px solid var(--gold);
-    border-radius: 12px;
-    padding: 1.1rem 1.2rem;
+    border-radius: 14px;
+    padding: 1.2rem 1.3rem;
     text-align: center;
     margin-top: 1.1rem;
-    box-shadow: 0 6px 18px -8px var(--shadow);
+    box-shadow: 0 8px 26px -10px var(--shadow);
   }
+  .callout::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    z-index: -1;
+    border-radius: inherit;
+    padding: 2px;
+    background: conic-gradient(from var(--angle), var(--gold), var(--crimson), var(--cyan), var(--gold));
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: spinFrame 4s linear infinite;
+  }
+  @keyframes spinFrame { to { --angle: 360deg; } }
   .callout .to-label {
     font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
     font-size: 0.7rem;
@@ -333,12 +380,20 @@
     white-space: nowrap;
   }
   .num-cell.livre {
-    background: color-mix(in srgb, var(--focus) 14%, var(--bg-panel));
+    background: color-mix(in srgb, var(--cyan) 16%, var(--bg-panel));
+    border-color: color-mix(in srgb, var(--cyan) 55%, transparent);
     color: var(--ink);
+    animation: pulseLivre 2.6s ease-in-out infinite;
+  }
+  @keyframes pulseLivre {
+    0%, 100% { box-shadow: 0 0 6px 0 color-mix(in srgb, var(--cyan) 40%, transparent); }
+    50% { box-shadow: 0 0 16px 3px color-mix(in srgb, var(--cyan) 65%, transparent); }
   }
   .num-cell.vendido {
-    background: color-mix(in srgb, var(--crimson) 20%, var(--bg-panel));
+    background: var(--bg-panel-2);
+    border-color: var(--line);
     color: var(--ink-dim);
+    opacity: 0.7;
   }
   .legend {
     display: flex;
@@ -356,8 +411,8 @@
     height: 0.6rem;
     border-radius: 50%;
   }
-  .dot.livre { background: color-mix(in srgb, var(--focus) 60%, var(--bg-panel)); }
-  .dot.vendido { background: color-mix(in srgb, var(--crimson) 70%, var(--bg-panel)); }
+  .dot.livre { background: var(--cyan); box-shadow: 0 0 8px color-mix(in srgb, var(--cyan) 70%, transparent); }
+  .dot.vendido { background: var(--ink-dim); }
 
   .note {
     font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
@@ -378,12 +433,20 @@
   }
   footer .heart { color: var(--crimson-strong); }
 
-  @media (prefers-reduced-motion: no-preference) {
-    .callout { transition: box-shadow 0.3s ease; }
+  @media (prefers-reduced-motion: reduce) {
+    .blob, h1, .callout::before, .num-cell.livre {
+      animation: none !important;
+    }
+    .num-cell.livre { box-shadow: 0 0 10px 2px color-mix(in srgb, var(--cyan) 50%, transparent); }
   }
 </style>
-</head>
-<body>
+
+<div class="bg-blobs" aria-hidden="true">
+  <span class="blob blob-a"></span>
+  <span class="blob blob-b"></span>
+  <span class="blob blob-c"></span>
+</div>
+
 <div class="sheet">
   <p class="eyebrow">Rifa Solidária</p>
   <h1>Ajudando o Well a cuidar da filha</h1>
@@ -591,5 +654,3 @@
     }
   });
 </script>
-</body>
-</html>
