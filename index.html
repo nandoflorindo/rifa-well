@@ -354,52 +354,103 @@
 
   .number-grid {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 0.5rem;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.55rem;
   }
   .num-cell {
-    aspect-ratio: 1;
+    position: relative;
     display: flex;
-    flex-direction: column;
+    align-items: stretch;
+    height: 58px;
+    border-radius: 10px;
+    overflow: hidden;
+    background: linear-gradient(135deg, var(--bg-panel), var(--bg-panel-2));
+    border: 1px solid var(--line);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+  }
+  .num-cell .stub {
+    position: relative;
+    flex: 0 0 46px;
+    display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 8px;
-    border: 1px solid var(--line);
     font-family: "SFMono-Regular", Consolas, monospace;
     font-variant-numeric: tabular-nums;
+    font-weight: 800;
+    font-size: 1.05rem;
+    border-right: 1px dashed color-mix(in srgb, var(--ink) 30%, transparent);
   }
-  .num-cell .n { font-size: 1.15rem; font-weight: 700; }
-  .num-cell .buyer {
+  .num-cell .stub::before,
+  .num-cell .stub::after {
+    content: '';
+    position: absolute;
+    right: -6px;
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: var(--bg);
+  }
+  .num-cell .stub::before { top: -6px; }
+  .num-cell .stub::after { bottom: -6px; }
+  .num-cell .info {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
-    font-size: 0.58rem;
-    margin-top: 0.15rem;
-    max-width: 90%;
+    font-size: 0.68rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
     text-align: center;
+    padding: 0 0.4rem;
     overflow: hidden;
-    text-overflow: ellipsis;
     white-space: nowrap;
+    text-overflow: ellipsis;
   }
-  .num-cell.livre {
-    background: color-mix(in srgb, var(--cyan) 16%, var(--bg-panel));
-    border-color: color-mix(in srgb, var(--cyan) 55%, transparent);
+
+  .num-cell.livre .stub {
+    background: color-mix(in srgb, var(--cyan) 22%, var(--bg-panel));
     color: var(--ink);
+    text-shadow: 0 0 10px color-mix(in srgb, var(--cyan) 70%, transparent);
     animation: pulseLivre 2.6s ease-in-out infinite;
   }
+  .num-cell.livre .info { color: color-mix(in srgb, var(--cyan) 75%, var(--ink)); font-weight: 700; }
   @keyframes pulseLivre {
-    0%, 100% { box-shadow: 0 0 6px 0 color-mix(in srgb, var(--cyan) 40%, transparent); }
-    50% { box-shadow: 0 0 16px 3px color-mix(in srgb, var(--cyan) 65%, transparent); }
+    0%, 100% { box-shadow: inset 0 0 8px 0 color-mix(in srgb, var(--cyan) 30%, transparent); }
+    50% { box-shadow: inset 0 0 16px 2px color-mix(in srgb, var(--cyan) 55%, transparent); }
   }
+
   .num-cell.vendido {
-    background: var(--bg-panel-2);
-    border-color: var(--line);
-    color: var(--ink-dim);
-    opacity: 0.7;
+    background: linear-gradient(135deg, color-mix(in srgb, var(--gold) 20%, var(--bg-panel)), color-mix(in srgb, var(--crimson) 16%, var(--bg-panel-2)));
+    border-color: color-mix(in srgb, var(--gold) 55%, transparent);
+    animation: pulseVendido 3.2s ease-in-out infinite;
   }
+  @keyframes pulseVendido {
+    0%, 100% { box-shadow: inset 0 0 8px 0 color-mix(in srgb, var(--gold) 28%, transparent); }
+    50% { box-shadow: inset 0 0 18px 3px color-mix(in srgb, var(--gold) 55%, transparent); }
+  }
+  .num-cell.vendido .stub {
+    background: color-mix(in srgb, var(--gold) 32%, var(--bg-panel));
+    color: var(--gold-strong);
+    text-shadow: 0 0 10px color-mix(in srgb, var(--gold) 75%, transparent);
+  }
+  .num-cell.vendido .info {
+    color: var(--ink);
+    font-weight: 800;
+    font-size: 0.76rem;
+    text-transform: none;
+    letter-spacing: 0.01em;
+  }
+  .num-cell.vendido .info::before {
+    content: '\2665\00A0';
+    color: var(--crimson-strong);
+  }
+
   .legend {
     display: flex;
     justify-content: center;
     gap: 1.4rem;
-    margin-top: 0.9rem;
+    margin-top: 1rem;
     font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
     font-size: 0.78rem;
     color: var(--ink-dim);
@@ -412,7 +463,7 @@
     border-radius: 50%;
   }
   .dot.livre { background: var(--cyan); box-shadow: 0 0 8px color-mix(in srgb, var(--cyan) 70%, transparent); }
-  .dot.vendido { background: var(--ink-dim); }
+  .dot.vendido { background: var(--gold); box-shadow: 0 0 8px color-mix(in srgb, var(--gold) 70%, transparent); }
 
   .note {
     font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
@@ -434,10 +485,11 @@
   footer .heart { color: var(--crimson-strong); }
 
   @media (prefers-reduced-motion: reduce) {
-    .blob, h1, .callout::before, .num-cell.livre {
+    .blob, h1, .callout::before, .num-cell.livre, .num-cell.vendido {
       animation: none !important;
     }
-    .num-cell.livre { box-shadow: 0 0 10px 2px color-mix(in srgb, var(--cyan) 50%, transparent); }
+    .num-cell.livre { box-shadow: inset 0 0 10px 2px color-mix(in srgb, var(--cyan) 50%, transparent); }
+    .num-cell.vendido { box-shadow: inset 0 0 10px 2px color-mix(in srgb, var(--gold) 45%, transparent); }
   }
 </style>
 
@@ -464,40 +516,40 @@
   <section>
     <h2>Números</h2>
     <div class="number-grid">
-      <div class="num-cell livre"><span class="n">1</span></div>
-      <div class="num-cell livre"><span class="n">2</span></div>
-      <div class="num-cell livre"><span class="n">3</span></div>
-      <div class="num-cell livre"><span class="n">4</span></div>
-      <div class="num-cell livre"><span class="n">5</span></div>
-      <div class="num-cell livre"><span class="n">6</span></div>
-      <div class="num-cell livre"><span class="n">7</span></div>
-      <div class="num-cell vendido"><span class="n">8</span><span class="buyer">Nando</span></div>
-      <div class="num-cell livre"><span class="n">9</span></div>
-      <div class="num-cell livre"><span class="n">10</span></div>
-      <div class="num-cell livre"><span class="n">11</span></div>
-      <div class="num-cell livre"><span class="n">12</span></div>
-      <div class="num-cell livre"><span class="n">13</span></div>
-      <div class="num-cell livre"><span class="n">14</span></div>
-      <div class="num-cell livre"><span class="n">15</span></div>
-      <div class="num-cell livre"><span class="n">16</span></div>
-      <div class="num-cell livre"><span class="n">17</span></div>
-      <div class="num-cell livre"><span class="n">18</span></div>
-      <div class="num-cell livre"><span class="n">19</span></div>
-      <div class="num-cell livre"><span class="n">20</span></div>
-      <div class="num-cell livre"><span class="n">21</span></div>
-      <div class="num-cell livre"><span class="n">22</span></div>
-      <div class="num-cell livre"><span class="n">23</span></div>
-      <div class="num-cell livre"><span class="n">24</span></div>
-      <div class="num-cell livre"><span class="n">25</span></div>
-      <div class="num-cell livre"><span class="n">26</span></div>
-      <div class="num-cell livre"><span class="n">27</span></div>
-      <div class="num-cell livre"><span class="n">28</span></div>
-      <div class="num-cell livre"><span class="n">29</span></div>
-      <div class="num-cell livre"><span class="n">30</span></div>
+      <div class="num-cell livre"><span class="stub">1</span><span class="info">Livre</span></div>
+      <div class="num-cell livre"><span class="stub">2</span><span class="info">Livre</span></div>
+      <div class="num-cell livre"><span class="stub">3</span><span class="info">Livre</span></div>
+      <div class="num-cell livre"><span class="stub">4</span><span class="info">Livre</span></div>
+      <div class="num-cell livre"><span class="stub">5</span><span class="info">Livre</span></div>
+      <div class="num-cell livre"><span class="stub">6</span><span class="info">Livre</span></div>
+      <div class="num-cell livre"><span class="stub">7</span><span class="info">Livre</span></div>
+      <div class="num-cell vendido"><span class="stub">8</span><span class="info">Nando</span></div>
+      <div class="num-cell livre"><span class="stub">9</span><span class="info">Livre</span></div>
+      <div class="num-cell livre"><span class="stub">10</span><span class="info">Livre</span></div>
+      <div class="num-cell livre"><span class="stub">11</span><span class="info">Livre</span></div>
+      <div class="num-cell livre"><span class="stub">12</span><span class="info">Livre</span></div>
+      <div class="num-cell livre"><span class="stub">13</span><span class="info">Livre</span></div>
+      <div class="num-cell livre"><span class="stub">14</span><span class="info">Livre</span></div>
+      <div class="num-cell livre"><span class="stub">15</span><span class="info">Livre</span></div>
+      <div class="num-cell livre"><span class="stub">16</span><span class="info">Livre</span></div>
+      <div class="num-cell livre"><span class="stub">17</span><span class="info">Livre</span></div>
+      <div class="num-cell livre"><span class="stub">18</span><span class="info">Livre</span></div>
+      <div class="num-cell livre"><span class="stub">19</span><span class="info">Livre</span></div>
+      <div class="num-cell livre"><span class="stub">20</span><span class="info">Livre</span></div>
+      <div class="num-cell livre"><span class="stub">21</span><span class="info">Livre</span></div>
+      <div class="num-cell livre"><span class="stub">22</span><span class="info">Livre</span></div>
+      <div class="num-cell livre"><span class="stub">23</span><span class="info">Livre</span></div>
+      <div class="num-cell livre"><span class="stub">24</span><span class="info">Livre</span></div>
+      <div class="num-cell livre"><span class="stub">25</span><span class="info">Livre</span></div>
+      <div class="num-cell livre"><span class="stub">26</span><span class="info">Livre</span></div>
+      <div class="num-cell livre"><span class="stub">27</span><span class="info">Livre</span></div>
+      <div class="num-cell livre"><span class="stub">28</span><span class="info">Livre</span></div>
+      <div class="num-cell livre"><span class="stub">29</span><span class="info">Livre</span></div>
+      <div class="num-cell livre"><span class="stub">30</span><span class="info">Livre</span></div>
     </div>
     <div class="legend">
       <span><i class="dot livre"></i> Livre</span>
-      <span><i class="dot vendido"></i> Vendido</span>
+      <span><i class="dot vendido"></i> Já ajudou</span>
     </div>
   </section>
 
